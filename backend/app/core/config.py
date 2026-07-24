@@ -5,6 +5,12 @@ class Settings(BaseSettings):
     app_name: str = "BACA AI Platform"
     app_version: str = "0.4.0"
     debug: bool = True
+    secret_key: str
+    algorithm: str
+    access_token_expire_minutes: int
+    secret_key: str
+    algorithm: str
+    access_token_expire_minutes: int
 
     database_host: str
     database_port: int
