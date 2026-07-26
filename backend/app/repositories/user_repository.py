@@ -12,9 +12,7 @@ class UserRepository:
         return list(self.db.scalars(select(User)).all())
 
     def get_by_email(self, email: str):
-        return self.db.scalar(
-            select(User).where(User.email == email)
-        )
+        return self.db.scalar(select(User).where(User.email == email))
 
     def create(self, user: User) -> User:
         self.db.add(user)

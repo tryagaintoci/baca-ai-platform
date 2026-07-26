@@ -1,8 +1,9 @@
 from datetime import datetime
 
-from sqlalchemy import Boolean, DateTime, String, func
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import Boolean, DateTime, Enum, String, func
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from app.core.enums import UserRole
 from app.database.base import Base
 
 
@@ -22,6 +23,14 @@ class User(Base):
 
     password_hash: Mapped[str] = mapped_column(String(255))
 
+    role: Mapped[UserRole] = mapped_column(
+        Enum(
+            UserRole,
+            name="user_roles",
+            values_callable=lambda enum: [e.value for e in enum],
+        ),
+        default=UserRole.FARMER,
+    )
     is_active: Mapped[bool] = mapped_column(
         Boolean,
         default=True,
@@ -41,4 +50,9 @@ class User(Base):
         DateTime(timezone=True),
         server_default=func.now(),
         onupdate=func.now(),
+    )
+
+    farms = relationship(
+        "Farm",
+        back_populates="owner",
     )
