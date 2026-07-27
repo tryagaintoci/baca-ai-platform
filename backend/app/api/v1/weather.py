@@ -30,6 +30,23 @@ def get_weather_forecasts(
     return service.get_weather_forecasts(current_user)
 
 
+@router.post(
+    "/sync/{field_id}",
+    response_model=list[WeatherRead],
+)
+def sync_weather(
+    field_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    service = WeatherService(db)
+
+    return service.sync_weather(
+        field_id,
+        current_user,
+    )
+
+
 @router.get(
     "/{weather_id}",
     response_model=WeatherRead,

@@ -43,3 +43,17 @@ class WeatherRepository(BaseRepository):
                 )
             ).all()
         )
+
+    def get_by_field_and_date(
+        self,
+        field_id: int,
+        forecast_date,
+    ):
+        from sqlalchemy import select
+
+        return self.db.scalar(
+            select(Weather).where(
+                Weather.field_id == field_id,
+                Weather.forecast_date == forecast_date,
+            )
+        )
