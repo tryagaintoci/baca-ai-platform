@@ -1,3 +1,4 @@
+from app.knowledge.models import CropKnowledge as CropKnowledge
 from app.models.crop import Crop as Crop
 from app.models.farm import Farm as Farm
 from app.models.field import Field as Field

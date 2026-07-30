@@ -3,7 +3,6 @@ from sqlalchemy.orm import Session
 
 
 class BaseRepository:
-
     model = None
 
     def __init__(self, db: Session):

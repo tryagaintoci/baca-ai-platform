@@ -5,8 +5,12 @@ from app.api.v1.auth import router as auth_router
 from app.api.v1.farms import router as farms_router
 from app.api.v1.fields import router as fields_router
 from app.api.v1.health import router as health_router
+from app.api.v1.recommendations import (
+    router as recommendations_router,
+)
 from app.api.v1.users import router as users_router
 from app.api.v1.weather import router as weather_router
+from app.knowledge.api.router import router as knowledge_router
 
 router = APIRouter()
 
@@ -18,6 +22,9 @@ router.include_router(fields_router)
 router.include_router(crops.router)
 router.include_router(soil_analyses.router)
 router.include_router(weather_router)
+router.include_router(recommendations_router)
+
+router.include_router(knowledge_router)
 
 
 @router.get("/")

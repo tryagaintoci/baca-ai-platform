@@ -8,7 +8,6 @@ from app.services.base_owned_service import BaseOwnedService
 
 
 class FarmService(BaseOwnedService):
-
     object_name = "Farm"
 
     def __init__(self, db: Session):

@@ -10,7 +10,6 @@ from app.services.base_owned_service import BaseOwnedService
 
 
 class FieldService(BaseOwnedService):
-
     object_name = "Field"
 
     def __init__(self, db: Session):
@@ -20,8 +19,11 @@ class FieldService(BaseOwnedService):
 
         self.farm_repository = FarmRepository(db)
 
-    def get_fields(self):
-        return self.get_all()
+    def get_fields(
+        self,
+        user: User,
+    ):
+        return self.repository.get_for_user(user)
 
     def create_field(
         self,

@@ -30,13 +30,14 @@ def create_user(
     current_user: User = Depends(require_role(UserRole.ADMIN)),
     db: Session = Depends(get_db),
 ):
-    service = UserService(db)
-    return service.create_user(user)
-
     try:
+        service = UserService(db)
         return service.create_user(user)
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(
+            status_code=400,
+            detail=str(e),
+        )
 
 
 @router.get("/me", response_model=UserRead)

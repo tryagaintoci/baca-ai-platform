@@ -15,7 +15,6 @@ from app.services.base_owned_service import BaseOwnedService
 
 
 class WeatherService(BaseOwnedService):
-
     object_name = "Weather forecast"
 
     def __init__(self, db: Session):
@@ -132,38 +131,38 @@ class WeatherService(BaseOwnedService):
 
         forecasts = []
 
-        for i in range(len(daily["time"])):
-            forecast = self.repository.get_by_field_and_date(
-                field.id,
-                date.fromisoformat(daily["time"][i]),
-            )
-
-            if forecast is None:
-                forecast = Weather(
-                    field_id=field.id,
-                    forecast_date=date.fromisoformat(daily["time"][i]),
+        with self.repository.db.begin():
+            for i in range(len(daily["time"])):
+                forecast = self.repository.get_by_field_and_date(
+                    field.id,
+                    date.fromisoformat(daily["time"][i]),
                 )
 
-            forecast.temperature_min = daily["temperature_2m_min"][i]
-            forecast.temperature_max = daily["temperature_2m_max"][i]
-            forecast.rainfall = daily["precipitation_sum"][i]
-            forecast.wind_speed = daily["windspeed_10m_max"][i]
-            forecast.humidity = daily["relative_humidity_2m_mean"][i]
+                if forecast is None:
+                    forecast = Weather(
+                        field_id=field.id,
+                        forecast_date=date.fromisoformat(daily["time"][i]),
+                    )
 
-            code = daily["weathercode"][i]
+                forecast.temperature_min = daily["temperature_2m_min"][i]
+                forecast.temperature_max = daily["temperature_2m_max"][i]
+                forecast.rainfall = daily["precipitation_sum"][i]
+                forecast.wind_speed = daily["windspeed_10m_max"][i]
+                forecast.humidity = daily["relative_humidity_2m_mean"][i]
 
-            forecast.weather_condition = WEATHER_CODES.get(
-                code,
-                f"Unknown ({code})",
-            )
+                code = daily["weathercode"][i]
+
+                forecast.weather_condition = WEATHER_CODES.get(
+                    code,
+                    f"Unknown ({code})",
+                )
 
             forecast.source = "Open-Meteo"
 
             if forecast.id is None:
-                forecasts.append(self.repository.create(forecast))
+                self.repository.db.add(forecast)
+                forecasts.append(forecast)
             else:
-                forecasts.append(self.repository.update(forecast))
+                forecasts.append(forecast)
 
-        client.close()
-
-        return forecasts
+            return forecasts

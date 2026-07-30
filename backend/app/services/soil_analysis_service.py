@@ -14,7 +14,6 @@ from app.services.base_owned_service import BaseOwnedService
 
 
 class SoilAnalysisService(BaseOwnedService):
-
     object_name = "Soil analysis"
 
     def __init__(self, db: Session):

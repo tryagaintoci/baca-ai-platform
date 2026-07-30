@@ -16,9 +16,10 @@ router = APIRouter(
 @router.get("/", response_model=list[FieldRead])
 def get_fields(
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     service = FieldService(db)
-    return service.get_fields()
+    return service.get_fields(current_user)
 
 
 @router.post("/", response_model=FieldRead, status_code=201)

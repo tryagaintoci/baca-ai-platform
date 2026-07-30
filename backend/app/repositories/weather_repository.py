@@ -1,4 +1,4 @@
-from sqlalchemy import select
+from sqlalchemy import desc, select
 from sqlalchemy.orm import Session
 
 from app.core.enums import UserRole
@@ -10,7 +10,6 @@ from app.repositories.base_repository import BaseRepository
 
 
 class WeatherRepository(BaseRepository):
-
     model = Weather
 
     def __init__(
@@ -49,11 +48,26 @@ class WeatherRepository(BaseRepository):
         field_id: int,
         forecast_date,
     ):
-        from sqlalchemy import select
-
         return self.db.scalar(
-            select(Weather).where(
+            select(Weather)
+            .where(
                 Weather.field_id == field_id,
                 Weather.forecast_date == forecast_date,
             )
+            .with_for_update()
+        )
+
+    def get_latest(
+        self,
+        field_id: int,
+    ):
+        return self.db.scalar(
+            select(Weather)
+            .where(
+                Weather.field_id == field_id,
+            )
+            .order_by(
+                desc(Weather.forecast_date),
+            )
+            .limit(1)
         )

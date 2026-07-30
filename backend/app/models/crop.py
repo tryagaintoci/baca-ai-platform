@@ -1,8 +1,9 @@
 from datetime import date, datetime
 
-from sqlalchemy import Date, DateTime, ForeignKey, String, func
+from sqlalchemy import Date, DateTime, Enum, ForeignKey, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from app.core.enums import GrowthStage
 from app.database.base import Base
 
 
@@ -20,6 +21,11 @@ class Crop(Base):
     expected_harvest_date: Mapped[date] = mapped_column(Date)
 
     status: Mapped[str] = mapped_column(String(50))
+
+    growth_stage: Mapped[GrowthStage] = mapped_column(
+        Enum(GrowthStage),
+        default=GrowthStage.VEGETATIVE,
+    )
 
     season: Mapped[str] = mapped_column(String(50))
 

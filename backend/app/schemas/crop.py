@@ -2,6 +2,8 @@ from datetime import date
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from app.core.enums import GrowthStage
+
 
 class CropBase(BaseModel):
     name: str = Field(
@@ -22,6 +24,8 @@ class CropBase(BaseModel):
         min_length=2,
         max_length=50,
     )
+
+    growth_stage: GrowthStage
 
     season: str = Field(
         min_length=2,
@@ -44,6 +48,7 @@ class CropUpdate(BaseModel):
     planting_date: date | None = None
     expected_harvest_date: date | None = None
     status: str | None = None
+    growth_stage: GrowthStage | None = None
     season: str | None = None
     notes: str | None = None
 

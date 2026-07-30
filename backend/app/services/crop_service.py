@@ -10,7 +10,6 @@ from app.services.base_owned_service import BaseOwnedService
 
 
 class CropService(BaseOwnedService):
-
     object_name = "Crop"
 
     def __init__(self, db: Session):

@@ -48,3 +48,15 @@ def test_get_current_user(client):
     user = response.json()
 
     assert user["email"] == "ahmed@example.com"
+
+
+def test_login_ali(client):
+    response = client.post(
+        "/api/v1/auth/token",
+        data={
+            "username": "ali@example.com",
+            "password": "Baca123!",
+        },
+    )
+
+    assert response.status_code == 200

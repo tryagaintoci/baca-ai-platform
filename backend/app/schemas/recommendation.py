@@ -2,7 +2,6 @@ from pydantic import BaseModel
 
 
 class Recommendation(BaseModel):
-
     category: str
     priority: str
 

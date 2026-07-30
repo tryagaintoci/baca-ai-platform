@@ -1,13 +1,15 @@
+import os
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+ENV_FILE = os.getenv("ENV_FILE", ".env")
 
 
 class Settings(BaseSettings):
     app_name: str = "BACA AI Platform"
     app_version: str = "0.4.0"
     debug: bool = True
-    secret_key: str
-    algorithm: str
-    access_token_expire_minutes: int
+
     secret_key: str
     algorithm: str
     access_token_expire_minutes: int
@@ -19,7 +21,7 @@ class Settings(BaseSettings):
     database_password: str
 
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=ENV_FILE,
         case_sensitive=False,
     )
 
@@ -28,8 +30,8 @@ class Settings(BaseSettings):
         return (
             f"postgresql+psycopg://"
             f"{self.database_user}:{self.database_password}"
-            f"@{self.database_host}:{self.database_port}/"
-            f"{self.database_name}"
+            f"@{self.database_host}:{self.database_port}"
+            f"/{self.database_name}"
         )
 
 
