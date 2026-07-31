@@ -30,10 +30,10 @@ class UserService:
     def get_users(self) -> list[User]:
         return self.repository.get_all()
 
-    def authenticate(self, email: str, password: str):
+    def authenticate(self, email: str, password: str) -> User | None:
         user = self.repository.get_by_email(email)
 
-        if not user:
+        if user is None:
             return None
 
         if not verify_password(password, user.password_hash):
