@@ -30,7 +30,12 @@ jobs:
           --health-retries=5
 
     env:
-      DATABASE_URL: postgresql+psycopg://postgres:postgres@localhost:5432/baca_test
+      DATABASE_HOST: localhost
+      DATABASE_PORT: 5432
+      DATABASE_NAME: baca_test
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: postgres
+
       SECRET_KEY: test-secret-key
       ALGORITHM: HS256
       ACCESS_TOKEN_EXPIRE_MINUTES: 60
