@@ -30,12 +30,13 @@ def calculate_health_score(
     if soil.organic_matter < 2:
         score -= 5
 
+    # La variable crop est réservée pour les futures règles
+    _ = crop
+
     return max(score, 0)
 
 
-def calculate_risk_level(
-    score: int,
-) -> str:
+def calculate_risk_level(score: int) -> str:
     if score >= 90:
         return "LOW"
 

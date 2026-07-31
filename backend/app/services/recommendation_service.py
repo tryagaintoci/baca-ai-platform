@@ -21,14 +21,14 @@ class RecommendationService:
         self.field_repository = FieldRepository(db)
         self.weather_repository = WeatherRepository(db)
         self.soil_repository = SoilAnalysisRepository(db)
-        self.engine = RecommendationEngine()
         self.crop_repository = CropRepository(db)
+        self.engine = RecommendationEngine()
 
     def generate(
         self,
         field_id: int,
         current_user: User,
-    ):
+    ) -> RecommendationReport:
         field = self.field_repository.get_by_id(field_id)
 
         if field is None:
@@ -69,6 +69,7 @@ class RecommendationService:
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Crop not found",
             )
+
         recommendations = self.engine.generate(
             weather,
             soil,

@@ -10,15 +10,15 @@ class CropRepository(BaseRepository):
     def get_active_by_field(
         self,
         field_id: int,
-    ):
+    ) -> Crop | None:
         crop = self.db.scalar(
-            select(self.model)
+            select(Crop)
             .where(
-                self.model.field_id == field_id,
-                self.model.status == "ACTIVE",
+                Crop.field_id == field_id,
+                Crop.status == "ACTIVE",
             )
             .order_by(
-                desc(self.model.planting_date),
+                desc(Crop.planting_date),
             )
             .limit(1)
         )
@@ -27,12 +27,12 @@ class CropRepository(BaseRepository):
             return crop
 
         return self.db.scalar(
-            select(self.model)
+            select(Crop)
             .where(
-                self.model.field_id == field_id,
+                Crop.field_id == field_id,
             )
             .order_by(
-                desc(self.model.planting_date),
+                desc(Crop.planting_date),
             )
             .limit(1)
         )

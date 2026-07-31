@@ -140,8 +140,7 @@ class WeatherService(BaseOwnedService):
 
         forecasts = []
 
-        with self.repository.db.begin():
-            for i in range(len(daily["time"])):
+        for i in range(len(daily["time"])):
                 forecast = self.repository.get_by_field_and_date(
                     field.id,
                     date.fromisoformat(daily["time"][i]),
@@ -174,5 +173,7 @@ class WeatherService(BaseOwnedService):
                     self.repository.db.add(forecast)
 
                 forecasts.append(forecast)
+
+                self.repository.db.commit()
 
         return forecasts

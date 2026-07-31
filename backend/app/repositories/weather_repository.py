@@ -12,10 +12,7 @@ from app.repositories.base_repository import BaseRepository
 class WeatherRepository(BaseRepository):
     model = Weather
 
-    def __init__(
-        self,
-        db: Session,
-    ):
+    def __init__(self, db: Session):
         super().__init__(db)
 
     def get_for_user(
@@ -27,7 +24,10 @@ class WeatherRepository(BaseRepository):
 
         return list(
             self.db.scalars(
-                select(Weather).join(Field).join(Farm).where(Farm.owner_id == user.id)
+                select(Weather)
+                .join(Field)
+                .join(Farm)
+                .where(Farm.owner_id == user.id)
             ).all()
         )
 
@@ -47,7 +47,7 @@ class WeatherRepository(BaseRepository):
         self,
         field_id: int,
         forecast_date,
-    ):
+    ) -> Weather | None:
         return self.db.scalar(
             select(Weather)
             .where(
@@ -60,7 +60,7 @@ class WeatherRepository(BaseRepository):
     def get_latest(
         self,
         field_id: int,
-    ):
+    ) -> Weather | None:
         return self.db.scalar(
             select(Weather)
             .where(

@@ -10,10 +10,13 @@ class UserService:
     def __init__(self, db: Session):
         self.repository = UserRepository(db)
 
-    def create_user(self, user: UserCreate) -> User:
+    def create_user(
+        self,
+        user: UserCreate,
+    ) -> User:
         existing_user = self.repository.get_by_email(user.email)
 
-        if existing_user:
+        if existing_user is not None:
             raise ValueError("Email already exists")
 
         new_user = User(
@@ -30,13 +33,20 @@ class UserService:
     def get_users(self) -> list[User]:
         return self.repository.get_all()
 
-    def authenticate(self, email: str, password: str) -> User | None:
+    def authenticate(
+        self,
+        email: str,
+        password: str,
+    ) -> User | None:
         user = self.repository.get_by_email(email)
 
         if user is None:
             return None
 
-        if not verify_password(password, user.password_hash):
+        if not verify_password(
+            password,
+            user.password_hash,
+        ):
             return None
 
         return user
