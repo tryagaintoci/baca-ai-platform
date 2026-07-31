@@ -15,3 +15,12 @@ backend/.venv/
 
 # Variables d'environnement
 .env
+.env.test
+
+# Tests / Coverage
+.coverage
+.pytest_cache/
+htmlcov/
+
+# Ruff
+.ruff_cache/
