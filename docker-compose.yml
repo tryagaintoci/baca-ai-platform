@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16
+
+    container_name: baca-postgres
+
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: baca_db
+      POSTGRES_USER: baca_user
+      POSTGRES_PASSWORD: baca_password
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

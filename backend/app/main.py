@@ -1,8 +1,13 @@
 from fastapi import FastAPI
 
-app = FastAPI(title="BACA AI Platform", version="0.1.0")
+from app.api.v1.router import router
+from app.core.config import settings
 
+app = FastAPI(
+    title=settings.app_name,
+    version=settings.app_version,
+    debug=settings.debug,
+    description="AI platform for agricultural analysis and advisory",
+)
 
-@app.get("/")
-def root():
-    return {"message": "Welcome to BACA AI Platform"}
+app.include_router(router, prefix="/api/v1")
