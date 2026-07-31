@@ -50,12 +50,12 @@ jobs:
           pip install \
             alembic \
             black \
-            "psycopg[binary]" \
+            psycopg[binary] \
             pytest \
             pytest-cov \
             ruff \
             sqlalchemy
-
+          
       - name: Ruff
         run: ruff check .
 
