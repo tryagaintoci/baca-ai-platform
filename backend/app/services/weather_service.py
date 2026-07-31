@@ -122,12 +122,21 @@ class WeatherService(BaseOwnedService):
 
         client = OpenMeteoClient()
 
-        data = client.get_forecast(
-            field.latitude,
-            field.longitude,
-        )
+        try:
+            data = client.get_forecast(
+                field.latitude,
+                field.longitude,
+            )
+        finally:
+            client.close()
 
-        daily = data["daily"]
+        daily = data.get("daily")
+
+        if daily is None:
+            raise HTTPException(
+                status_code=status.HTTP_502_BAD_GATEWAY,
+                detail="Invalid response from Open-Meteo",
+            )
 
         forecasts = []
 
@@ -141,7 +150,9 @@ class WeatherService(BaseOwnedService):
                 if forecast is None:
                     forecast = Weather(
                         field_id=field.id,
-                        forecast_date=date.fromisoformat(daily["time"][i]),
+                        forecast_date=date.fromisoformat(
+                            daily["time"][i]
+                        ),
                     )
 
                 forecast.temperature_min = daily["temperature_2m_min"][i]
@@ -157,12 +168,11 @@ class WeatherService(BaseOwnedService):
                     f"Unknown ({code})",
                 )
 
-            forecast.source = "Open-Meteo"
+                forecast.source = "Open-Meteo"
 
-            if forecast.id is None:
-                self.repository.db.add(forecast)
-                forecasts.append(forecast)
-            else:
+                if forecast.id is None:
+                    self.repository.db.add(forecast)
+
                 forecasts.append(forecast)
 
-            return forecasts
+        return forecasts
